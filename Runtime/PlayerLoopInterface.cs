@@ -29,7 +29,8 @@ public static class PlayerLoopInterface {
 
     private static List<PlayerLoopSystem> insertedSystems = new List<PlayerLoopSystem>();
 
-    [RuntimeInitializeOnLoadMethod]
+#if UNITY_EDITOR
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void Initialize() {
         // Systems are not automatically removed from the PlayerLoop, so we need to clean up the ones that have been added in play mode, as they'd otherwise
         // keep running when outside play mode, and in the next play mode if we don't have assembly reload turned on.
@@ -46,6 +47,7 @@ public static class PlayerLoopInterface {
 
         Application.quitting -= ClearInsertedSystems;
     }
+#endif
 
     private enum InsertType {
         Before,
@@ -226,7 +228,7 @@ public static class PlayerLoopInterface {
             couldInsert = false;
         }
     }
-    
+
     /// <summary>
     /// Utility to get a string representation of the current player loop.
     /// </summary>
